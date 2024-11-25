@@ -2,7 +2,7 @@ import express from "express";
 import "dotenv/config"
 import cors from 'cors'
 import cookieParser from "cookie-parser"
-import { ORIGIN, PORT } from "./utils/env.js";
+import { ORIGIN, PORT } from "./utils/constants/env.js";
 import authRoutes from "./routes/auth.js";
 import errorHandler from "./middleware/errorHandler.js";
 import connect from "./database/connect.js";

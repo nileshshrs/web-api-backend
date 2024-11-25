@@ -8,3 +8,5 @@ const getEnv = (key) => {
 export const PORT = getEnv("PORT");
 export const ORIGIN = getEnv("ORIGIN")
 export const URI = getEnv("URI")
+export const JWT_SECRET = getEnv("JWT_SECRET");
+export const JWT_REFRESH_SECRET = getEnv("JWT_REFRESH_SECRET");

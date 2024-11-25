@@ -1,5 +1,5 @@
 import mongoose from "mongoose";
-import { URI } from "../utils/env.js"; // Ensure URI is correctly imported from env
+import { URI } from "../utils/constants/env.js"; // Ensure URI is correctly imported from env
 
 const connect = async () => {
     try {

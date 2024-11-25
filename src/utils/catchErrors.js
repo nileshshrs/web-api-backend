@@ -1,10 +1,9 @@
 const catchErrors = (controller) => async (req, res, next) => {
     try {
-        // throw new Error("this is a test error")
         await controller(req, res, next);
-    } catch (error) {
-        next(error)
+    } catch (e) {
+        next(e);
     }
-}
+};
 
-export default catchErrors
+export default catchErrors;
