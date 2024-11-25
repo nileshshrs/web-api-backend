@@ -18,6 +18,8 @@ export const accessTokenSignOptions = {
 
 // Keep the signTokens function as well
 export const signTokens = (payload, options) => {
+    console.log(options)
+
     const { secret, ...signOpts } = options || accessTokenSignOptions;
 
     return jwt.sign(payload, secret, { ...defaults, ...signOpts });
@@ -25,11 +27,14 @@ export const signTokens = (payload, options) => {
 
 
 export const verifyToken = (token, options) => {
-    const { secret = JWT_SECRET, ...verifyOpts } = options || {};
+
+    const { secret, ...verifyOpts } = options || refreshTokenSignOptions;
     try {
         const payload = jwt.verify(token, secret, { ...defaults, ...verifyOpts })
+        console.log(payload)
         return { payload }
     } catch (err) {
+        console.log(err)
         return {
             error: err.message
         }
