@@ -100,21 +100,3 @@ export const loginUser = async ({ usernameOrEmail, password, userAgent }) => {
     };
 };
 
-export const logoutController = catchErrors(
-    async (req, res) => {
-
-        const accessToken = req.cookies.access_token
-        const refreshToken = req.cookies.refresh_token
-
-        const { payload } = verifyToken(accessToken)
-
-        if (payload) {
-            await SessionModel.findByIdAndDelete(payload.sessionID)
-        }
-
-        return clearAuthCookies(res).status(OK).json({
-            message: "user logged out successfully"
-        })
-
-    }
-)
