@@ -22,3 +22,16 @@ export const signTokens = (payload, options) => {
 
     return jwt.sign(payload, secret, { ...defaults, ...signOpts });
 };
+
+
+export const verifyToken = (token, options) => {
+    const { secret = JWT_SECRET, ...verifyOpts } = options || {};
+    try {
+        const payload = jwt.verify(token, secret, { ...defaults, ...verifyOpts })
+        return { payload }
+    } catch (err) {
+        return {
+            error: err.message
+        }
+    }
+}

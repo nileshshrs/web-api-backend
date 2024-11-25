@@ -3,8 +3,10 @@ import { userModel } from "../model/user.js";
 import verificationCodeModel from "../model/verificationCode.js";
 import { oneDayFromNow } from "../utils/date.js";
 import appAssert from "../utils/appAssert.js";
-import { CONFLICT, UNAUTHORIZED } from "../utils/constants/http.js";
-import { signTokens, refreshTokenSignOptions, accessTokenSignOptions } from "../utils/jwt.js";
+import { CONFLICT, OK, UNAUTHORIZED } from "../utils/constants/http.js";
+import { signTokens, refreshTokenSignOptions, accessTokenSignOptions, verifyToken } from "../utils/jwt.js";
+import catchErrors from "../utils/catchErrors.js";
+import { clearAuthCookies } from "../utils/cookies.js";
 
 export const createAccount = async (data) => {
     // Verify user does not exist
@@ -97,3 +99,22 @@ export const loginUser = async ({ usernameOrEmail, password, userAgent }) => {
         refreshToken,
     };
 };
+
+export const logoutController = catchErrors(
+    async (req, res) => {
+
+        const accessToken = req.cookies.access_token
+        const refreshToken = req.cookies.refresh_token
+
+        const { payload } = verifyToken(accessToken)
+
+        if (payload) {
+            await SessionModel.findByIdAndDelete(payload.sessionID)
+        }
+
+        return clearAuthCookies(res).status(OK).json({
+            message: "user logged out successfully"
+        })
+
+    }
+)

@@ -1,5 +1,6 @@
 import { fifteenDaysFromNow, fifteenMinutesFromNow } from "./date.js";
 
+const refresh_path = "/auth/refresh"
 const defaults = {
     sameSite: "none",
     httpOnly: true,
@@ -14,7 +15,7 @@ const getAccessTokenCookieOptions = () => ({
 const getRefreshTokenCookieOptions = () => ({
     ...defaults,
     expires: fifteenDaysFromNow(),
-    path: "/auth/refresh",
+    path: refresh_path,
 });
 
 export const setAuthCookies = (res, accessToken, refreshToken) =>
@@ -23,3 +24,9 @@ export const setAuthCookies = (res, accessToken, refreshToken) =>
         .cookie("refresh_token", refreshToken, getRefreshTokenCookieOptions());
 
 
+export const clearAuthCookies = (res,) =>
+    res
+        .clearCookie("access_token")
+        .clearCookie("refresh_token", {
+            path: refresh_path,
+        })
