@@ -3,9 +3,11 @@ import { userModel } from "../model/user.js";
 import verificationCodeModel from "../model/verificationCode.js";
 import { fifteenDaysFromNow, oneDayFromNow } from "../utils/date.js";
 import appAssert from "../utils/appAssert.js";
-import { CONFLICT, UNAUTHORIZED } from "../utils/constants/http.js";
+import { CONFLICT, INTERNAL_SERVER_ERROR, NOT_FOUND, UNAUTHORIZED } from "../utils/constants/http.js";
 import { signTokens, refreshTokenSignOptions, accessTokenSignOptions, verifyToken } from "../utils/jwt.js";
-import { JWT_REFRESH_SECRET } from "../utils/constants/env.js";
+import { APP_ORIGIN, JWT_REFRESH_SECRET } from "../utils/constants/env.js";
+import { sendMail } from "../utils/sendMail.js";
+import { getVerifyEmailTemplate } from "../utils/emailtemplate.js";
 
 export const createAccount = async (data) => {
     // Verify user does not exist
@@ -28,6 +30,15 @@ export const createAccount = async (data) => {
         type: "email_verification",
         expiresAt: oneDayFromNow(),
     });
+    //send verification email
+    const url = `${APP_ORIGIN}/email-verification/${verificationCode._id}`
+    const { error } = await sendMail({
+        to: user.email,
+        ...getVerifyEmailTemplate(url)
+    })
+
+    if (error) console.log(error)
+
 
     // Create session
     const session = await SessionModel.create({
@@ -134,5 +145,39 @@ export const refreshUserAccessToken = async (refreshToken) => {
         accessToken, newRefreshToken
     }
 
+}
+
+export const verifyEmail = async (code) => {
+    //get the verificationc code
+
+    const validCode = await verificationCodeModel.findOne({
+        _id: code,
+        type: "email_verification",
+        expiresAt: { $gt: new Date() },
+    })
+
+    console.log(validCode)
+    appAssert(validCode, NOT_FOUND, "invalid or expired verification code.");
+
+
+
+    //get user by id & update user to verified = true
+    const updatedUser = await userModel.findByIdAndUpdate(
+        validCode.userID, // The user's ID from the verification code
+        { verified: true }, // Update the 'verified' field to true
+        { new: true } // Ensure that the updated document is returned
+    );
+    console.log("updated user: ", updatedUser)
+
+
+
+    appAssert(updatedUser, INTERNAL_SERVER_ERROR, "failed to verify user.")
+    //delete verification code
+    await validCode.deleteOne()
+
+
+    return {
+        user: updatedUser.omitPassword()
+    }
 }
 

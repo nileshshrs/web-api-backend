@@ -29,7 +29,7 @@ const errorHandler = (error, req, res, next) => {
     if (error instanceof AppError) {
         return handleAppError(res, error);
     }
-    res.status(INTERNAL_SERVER_ERROR).send("Internal Server Error.");
+    res.status(INTERNAL_SERVER_ERROR).send("Internal Server Error. sometimes you forget to add .js to imports too so do check");
     // Do not return the Response object explicitly
 };
 

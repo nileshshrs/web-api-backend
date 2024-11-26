@@ -38,3 +38,5 @@ export const loginSchema = z.object({
         path: ['password'],
     }
 );
+
+export const verificationCodeSchema = z.string().min(1)
