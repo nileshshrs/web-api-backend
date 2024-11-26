@@ -1,8 +1,8 @@
 import catchErrors from "../utils/catchErrors.js";
-import { createAccount, loginUser, refreshUserAccessToken, verifyEmail } from "../service/authService.js";
+import { createAccount, loginUser, refreshUserAccessToken, sendPasswordResetEmail, verifyEmail } from "../service/authService.js";
 import { getAccessTokenCookieOptions, getRefreshTokenCookieOptions, setAuthCookies } from "../utils/cookies.js";
 import { CREATED, OK, UNAUTHORIZED } from "../utils/constants/http.js";
-import { loginSchema, registerSchema, verificationCodeSchema } from "../utils/authSchemas.js";
+import { loginSchema, registerSchema, verificationCodeSchema, emailSchema } from "../utils/authSchemas.js";
 import appAssert from "../utils/appAssert.js";
 import { verifyToken } from "../utils/jwt.js";
 import { clearAuthCookies } from "../utils/cookies.js";
@@ -58,7 +58,7 @@ export const logoutController = catchErrors(
 export const refreshController = catchErrors(
     async (req, res) => {
         const refreshToken = req.cookies.refresh_token
- 
+
         appAssert(refreshToken, UNAUTHORIZED, "missing refresh token.");
 
 
@@ -72,7 +72,7 @@ export const refreshController = catchErrors(
 )
 
 export const verifyEmailController = catchErrors(
-    async(req, res)=>{
+    async (req, res) => {
 
         const verificationCode = verificationCodeSchema.parse(req.params.code);
         await verifyEmail(verificationCode);
@@ -82,3 +82,21 @@ export const verifyEmailController = catchErrors(
         })
     }
 )
+
+export const sendPasswordResetController = catchErrors(
+    async (req, res) => {
+        console.log(req.body.email)
+        const parsedEmail = emailSchema.parse(req.body.email); // Ensure email validation
+
+
+        // Call the service function to handle the logic of sending the reset email
+        const { url, emailId } = await sendPasswordResetEmail(parsedEmail);
+
+        // Respond with success message
+        res.status(200).json({
+            message: "Password reset email sent.",
+            resetUrl: url, // Optionally, return the URL as well in the response.
+            emailId
+        });
+    }
+);

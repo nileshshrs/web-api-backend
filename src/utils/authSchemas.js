@@ -1,7 +1,7 @@
 import { z } from "zod";
 
 const EMAIL_REGEX = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/
-const emailSchema = z.string()
+export const emailSchema = z.string()
     .regex(EMAIL_REGEX, "Invalid email format")
     .min(2, "Email cannot be empty")
     .max(255)
