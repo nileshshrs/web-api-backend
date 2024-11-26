@@ -5,7 +5,8 @@ import {
     logoutController,
     refreshController,
     verifyEmailController,
-    sendPasswordResetController
+    sendPasswordResetController,
+    resetPasswordController
 } from "../controllers/authController.js";
 
 
@@ -19,5 +20,6 @@ authRoutes.get("/logout", logoutController)
 authRoutes.get("/refresh", refreshController)
 authRoutes.get("/verify-email/:code", verifyEmailController)
 authRoutes.post("/account-recovery", sendPasswordResetController)
+authRoutes.post("/reset-password", resetPasswordController)
 
 export default authRoutes

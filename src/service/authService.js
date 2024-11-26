@@ -8,6 +8,7 @@ import { signTokens, refreshTokenSignOptions, accessTokenSignOptions, verifyToke
 import { APP_ORIGIN, JWT_REFRESH_SECRET } from "../utils/constants/env.js";
 import { sendMail } from "../utils/sendMail.js";
 import { getPasswordResetTemplate, getVerifyEmailTemplate } from "../utils/emailtemplate.js";
+import { hash } from "../utils/bcrypt.js";
 
 export const createAccount = async (data) => {
     // Verify user does not exist
@@ -32,11 +33,11 @@ export const createAccount = async (data) => {
     });
     //send verification email
     const url = `${APP_ORIGIN}/email-verification/${verificationCode._id}`
-    const {error} =await sendMail({
+    const { error } = await sendMail({
         to: user.email,
         ...getVerifyEmailTemplate(url)
     })
-    if(error) console.log(error);
+    if (error) console.log(error);
 
     // Create session
     const session = await SessionModel.create({
@@ -163,13 +164,14 @@ export const verifyEmail = async (code) => {
         { verified: true }, // Update the 'verified' field to true
         { new: true } // Ensure that the updated document is returned
     );
-   
+
 
     appAssert(updatedUser, INTERNAL_SERVER_ERROR, "failed to verify user.")
     //delete verification code
-    await validCode.deleteOne()
-
-
+    await verificationCodeModel.deleteMany({
+        userID: validCode.userID,
+        type: "email_verification",
+    });
     return {
         user: updatedUser.omitPassword()
     }
@@ -221,3 +223,36 @@ export const sendPasswordResetEmail = async (email) => {
         emailId: data.id, // Return the email ID from the sent email for logging or tracking purposes
     };
 };
+
+export const resetPassword = async ({ password, verificationCode }) => {
+    //get verification code;
+    const validCode = await verificationCodeModel.findOne({
+        _id: verificationCode,
+        type: "password_reset",
+        expiresAt: { $gt: new Date() },
+    })
+    appAssert(validCode, NOT_FOUND, "invalid or expired verification code.");
+    //update user password
+
+    const updatedUser = await userModel.findByIdAndUpdate(
+        validCode.userID, // The user's ID from the verification code
+        { password: await hash(password) }, // Update the 'password' field
+        { new: true } // Ensure that the updated document is returned
+    );
+
+    appAssert(updatedUser, NOT_FOUND, "failed to reset password");
+    //delete verification code
+    await verificationCodeModel.deleteMany({
+        userID: validCode.userID,
+        type: "password_reset",
+    });
+
+    //delete all sessions
+    await SessionModel.deleteMany({
+        userID: validCode.userID,
+    });
+
+    return {
+        user: updatedUser.omitPassword()
+    }
+}
