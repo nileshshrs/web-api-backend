@@ -6,7 +6,6 @@ import { verifyAccessToken } from "../utils/jwt.js";
 
 const authenticate = (req, res, next) => {
 
-    console.log(req.cookies.access_token)
     const accessToken = req.cookies.access_token || undefined;
     appAssert(accessToken, UNAUTHORIZED, "not authorized.", AppErrorCode.InvalidAccessToken);
 

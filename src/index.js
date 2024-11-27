@@ -8,6 +8,7 @@ import errorHandler from "./middleware/errorHandler.js";
 import connect from "./database/connect.js";
 import authenticate from "./middleware/authenticate.js";
 import userRoutes from "./routes/userRoutes.js";
+import sessionRoutes from "./routes/sessionRoutes.js";
 
 
 const app = express();
@@ -29,6 +30,7 @@ app.use(cookieParser())
 app.use("/api/v1/auth", authRoutes)
 //protected routes
 app.use("/api/v1/user", authenticate, userRoutes)
+app.use("/api/v1/session", authenticate, sessionRoutes)
 app.use(errorHandler)
 
 app.get("/", (req, res) => {

@@ -1,7 +1,6 @@
 import jwt from "jsonwebtoken";
 import { JWT_REFRESH_SECRET, JWT_SECRET } from "./constants/env.js";
 
-
 const defaults = {
     audience: ['user'],
 };
@@ -18,18 +17,14 @@ export const accessTokenSignOptions = {
 
 // Keep the signTokens function as well
 export const signTokens = (payload, options) => {
-    console.log(options)
-
     const { secret, ...signOpts } = options || accessTokenSignOptions;
 
     return jwt.sign(payload, secret, { ...defaults, ...signOpts });
 };
 export const verifyAccessToken = (token, options) => {
-
     const { secret, ...verifyOpts } = options || accessTokenSignOptions;
     try {
         const payload = jwt.verify(token, secret, { ...defaults, ...verifyOpts })
-        console.log(payload)
         return { payload }
     } catch (err) {
         console.log(err)
@@ -40,11 +35,9 @@ export const verifyAccessToken = (token, options) => {
 }
 
 export const verifyToken = (token, options) => {
-
     const { secret, ...verifyOpts } = options || refreshTokenSignOptions;
     try {
         const payload = jwt.verify(token, secret, { ...defaults, ...verifyOpts })
-        console.log(payload)
         return { payload }
     } catch (err) {
         console.log(err)
