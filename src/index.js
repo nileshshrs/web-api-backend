@@ -2,7 +2,7 @@ import express from "express";
 import "dotenv/config"
 import cors from 'cors'
 import cookieParser from "cookie-parser"
-import { ORIGIN, PORT } from "./utils/constants/env.js";
+import { PORT } from "./utils/constants/env.js";
 import authRoutes from "./routes/auth.js";
 import errorHandler from "./middleware/errorHandler.js";
 import connect from "./database/connect.js";
@@ -20,8 +20,10 @@ app.use(express.urlencoded({ extended: true }));
 //submissions or other requests that send data in the application/x-www-form-urlencoded format.
 app.use(
     cors({
-        origin: ORIGIN,
-        credentials: true
+        origin: 'http://localhost:5173',
+        credentials: true,
+        allowedHeaders: ['Content-Type', 'Authorization'],
+        methods: ['GET', 'POST', 'PUT', 'DELETE'],
     })
 )
 app.use(cookieParser())

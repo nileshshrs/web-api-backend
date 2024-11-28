@@ -4,7 +4,7 @@ const refresh_path = "api/v1/auth/refresh"
 const defaults = {
     sameSite: "none",
     httpOnly: true,
-    secure: false, // Set to true in production
+    secure: true, // Set to true in production
 };
 
 export const getAccessTokenCookieOptions = () => ({
