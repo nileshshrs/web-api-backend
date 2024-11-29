@@ -85,7 +85,6 @@ export const verifyEmailController = catchErrors(
 
 export const sendPasswordResetController = catchErrors(
     async (req, res) => {
-        console.log(req.body.email)
         const parsedEmail = emailSchema.parse(req.body.email); // Ensure email validation
 
 
