@@ -12,11 +12,11 @@ import { hash } from "../utils/bcrypt.js";
 
 export const createAccount = async (data) => {
     // Verify user does not exist
-    const existingUser = await userModel.exists({
-        email: data.email,
+    console.log(data)
+    const existingUser = await userModel.findOne({
+        $or: [{ email: data.email }, { username: data.username }],
     });
-
-    appAssert(!existingUser, CONFLICT, "Email already in use.");
+    appAssert(!existingUser, CONFLICT, "Email or username already in use.");
 
     // Create user
     const user = await userModel.create({

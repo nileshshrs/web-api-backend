@@ -14,14 +14,9 @@ export const registerSchema = z.object({
     email: emailSchema,
     username: z.string().min(4, "username cannot be empty or less than 4 characters").max(255),
     password: passwordSchema, // Optional max length for the password
-    confirmpassword: z.string(),
     role: z.enum(["user", "admin"]).default("user"), // Default role set here
     userAgent: z.string().optional() // Optional user agent
-}).refine(
-    (data) => data.password === data.confirmpassword, {
-    message: "Passwords do not match",
-    path: ['confirmpassword'], // This will show the error next to the confirm password field
-});
+})
 
 export const loginSchema = z.object({
     // Accept either a username or email
