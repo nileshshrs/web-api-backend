@@ -4,8 +4,9 @@ import { getAccessTokenCookieOptions, getRefreshTokenCookieOptions, setAuthCooki
 import { CREATED, OK, UNAUTHORIZED } from "../utils/constants/http.js";
 import { loginSchema, registerSchema, verificationCodeSchema, emailSchema, resetPasswordSchema } from "../utils/authSchemas.js";
 import appAssert from "../utils/appAssert.js";
-import { verifyToken } from "../utils/jwt.js";
+import { verifyAccessToken, verifyToken } from "../utils/jwt.js";
 import { clearAuthCookies } from "../utils/cookies.js";
+import SessionModel from "../model/session.js";
 
 
 
@@ -41,8 +42,10 @@ export const loginController = catchErrors(
 export const logoutController = catchErrors(
     async (req, res) => {
 
+
         const accessToken = req.cookies.access_token
-        const { payload } = verifyToken(accessToken || "")
+        const { payload } = verifyAccessToken(accessToken || "")
+
 
         if (payload) {
             await SessionModel.findByIdAndDelete(payload.sessionID)
