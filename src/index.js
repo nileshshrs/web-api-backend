@@ -9,9 +9,11 @@ import connect from "./database/connect.js";
 import authenticate from "./middleware/authenticate.js";
 import userRoutes from "./routes/userRoutes.js";
 import sessionRoutes from "./routes/sessionRoutes.js";
+import { server, app } from "./config/socket.js";
+import conversationRoutes from "./routes/conversationRoutes.js";
 
 
-const app = express();
+
 app.use(express.json());
 //This middleware is essential when handling form 
 //submissions or other requests that send data in the application/x-www-form-urlencoded format.
@@ -33,6 +35,7 @@ app.use("/api/v1/auth", authRoutes)
 //protected routes
 app.use("/api/v1/user", authenticate, userRoutes)
 app.use("/api/v1/session", authenticate, sessionRoutes)
+app.use("/api/v1/conversation", conversationRoutes)
 app.use(errorHandler)
 
 app.get("/", (req, res) => {
@@ -42,7 +45,7 @@ app.get("/", (req, res) => {
         })
 })
 
-app.listen(PORT, async () => {
+server.listen(PORT, async () => {
     console.log(`app is running on port: ${PORT} in a dev environment.`)
     connect()
 })

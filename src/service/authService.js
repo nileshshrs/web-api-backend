@@ -12,7 +12,7 @@ import { hash } from "../utils/bcrypt.js";
 
 export const createAccount = async (data) => {
     // Verify user does not exist
-    console.log(data)
+    // console.log(data)
     const existingUser = await userModel.findOne({
         $or: [{ email: data.email }, { username: data.username }],
     });

@@ -24,6 +24,14 @@ const userSchema = new mongoose.Schema({
     image: {
         type: String,  // Corrected from `string` to `String` (Mongoose type)
         default: "",
+    },
+    status: {
+        type: String,
+        default: '',
+    },
+    isOnlineStatus: {
+        type: Boolean,
+        default: false,
     }
 });
 
