@@ -36,6 +36,7 @@ app.use("/api/v1/auth", authRoutes)
 app.use("/api/v1/user", authenticate, userRoutes)
 app.use("/api/v1/session", authenticate, sessionRoutes)
 app.use("/api/v1/conversation", conversationRoutes)
+app.use("/api/v1/conversation", conversationRoutes)
 app.use(errorHandler)
 
 app.get("/", (req, res) => {

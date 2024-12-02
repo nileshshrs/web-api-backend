@@ -1,6 +1,7 @@
 import { conversationModel } from "../model/conversation.js";
+import appAssert from "../utils/appAssert.js";
 import catchErrors from "../utils/catchErrors.js";
-import { CREATED } from "../utils/constants/http.js";
+import { CREATED, NOT_FOUND, OK } from "../utils/constants/http.js";
 
 // Define the conversation controller
 export const createConversationController = catchErrors(
@@ -29,3 +30,17 @@ export const createConversationController = catchErrors(
         });
     }
 );
+
+
+export const getConversationController = catchErrors(async (req, res) => {
+    const userID = req.userID;
+    console.log(userID);
+
+    const conversation = await conversationModel
+        .find({ participants: userID })
+        .populate("participants", "username");
+
+    appAssert(conversation, NOT_FOUND, "Conversation not found.");
+
+    return res.status(OK).json(conversation);
+})
