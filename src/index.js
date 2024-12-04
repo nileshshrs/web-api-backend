@@ -11,6 +11,7 @@ import userRoutes from "./routes/userRoutes.js";
 import sessionRoutes from "./routes/sessionRoutes.js";
 import { server, app } from "./config/socket.js";
 import conversationRoutes from "./routes/conversationRoutes.js";
+import messageRoutes from "./routes/messageRoutes.js";
 
 
 
@@ -37,6 +38,7 @@ app.use("/api/v1/user", authenticate, userRoutes)
 app.use("/api/v1/session", authenticate, sessionRoutes)
 app.use("/api/v1/conversation", conversationRoutes)
 app.use("/api/v1/conversation", conversationRoutes)
+app.use("api/v1/messsages", authenticate, messageRoutes)
 app.use(errorHandler)
 
 app.get("/", (req, res) => {
