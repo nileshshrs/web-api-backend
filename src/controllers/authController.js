@@ -35,6 +35,8 @@ export const loginController = catchErrors(
         return setAuthCookies(res, accessToken, refreshToken).status(OK).json({
             message: "successfully logged in.",
             user,
+            accessToken,
+            refreshToken
         });
     }
 )
