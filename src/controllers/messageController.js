@@ -12,19 +12,29 @@ export const createMessageController = catchErrors(
         const message = { sender, conversation, ...content };
 
         const createdMessage = await createMessage(message);
+        const id = createdMessage._id;
+
+        const newMessage = await messageModel.findById(id)
+            .populate("sender", "username image",)
+            .populate("recipient", "username image",);
 
         return res.status(CREATED).json({
-            message: "message created successfully.",
-            createdMessage
+            message: "message created successfully",
+            newMessage,
         });
+
     }
 );
 
 export const getMessagesController = catchErrors(
     async (req, res) => {
-        const sender = req.userID;
+        const conversation = req.params.id;
 
-        const messages = await messageModel.find({ sender }).populate("sender", "username")
+        const messages = await messageModel.find({ conversation })
+            .populate("sender", "username image",)
+            .populate("recipient", "username image",)
+            ;
+
 
         return res.status(OK).json(messages);
     }

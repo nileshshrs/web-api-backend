@@ -19,12 +19,13 @@ export const createConversationController = catchErrors(
 
 
 export const getConversationController = catchErrors(async (req, res) => {
-    const userID = "6749cd4a23387321e3605545";
+    const userID = req.userID;
 
     const conversation = await conversationModel
         .find({ participants: userID })
-        .populate("participants", "username")
-        .populate("title","username");
+        .populate("participants", "username image")
+        .populate("title","username image")
+        .sort({ updatedAt: -1 });;
 
     appAssert(conversation, NOT_FOUND, "conversation not found.");
 

@@ -18,5 +18,5 @@ export const createMessage = async (message) => {
         }
     )
 
-    return message;
+    return create;
 }

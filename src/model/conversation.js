@@ -7,7 +7,7 @@ const conversationSchema = new mongoose.Schema({
     title: { type: mongoose.Schema.Types.ObjectId, ref: "User", default: null }, // Reference to the User who deleted the conversation
     createdAt: { type: Date, default: Date.now },
     updatedAt: { type: Date, default: Date.now },
-})
+}, { timestamps: true })
 
 conversationSchema.pre('save', function (next) {
     if (this.isModified('lastMessage')) {
