@@ -12,6 +12,7 @@ import sessionRoutes from "./routes/sessionRoutes.js";
 import { server, app } from "./config/socket.js";
 import conversationRoutes from "./routes/conversationRoutes.js";
 import messageRoutes from "./routes/messageRoutes.js";
+import followRoutes from "./routes/followRoutes.js";
 
 
 
@@ -38,6 +39,7 @@ app.use("/api/v1/user", authenticate, userRoutes)
 app.use("/api/v1/session", authenticate, sessionRoutes)
 app.use("/api/v1/conversation", conversationRoutes)
 app.use("/api/v1/messages", messageRoutes)
+app.use("/api/v1/follow", authenticate, followRoutes)
 
 app.use(errorHandler)
 

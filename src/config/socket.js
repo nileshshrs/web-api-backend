@@ -16,9 +16,10 @@ const io = new Server(server, {
 let users = [];
 
 const addusers = (userID, socketID) => {
-  // Remove any existing entries for this user before adding a new one
-  users = users.filter((user) => user.userID !== userID);
-  users.push({ userID, socketID });
+  // Ensure no duplicate entries for the same socket
+  if (!users.some((user) => user.socketID === socketID)) {
+    users.push({ userID, socketID });
+  }
 };
 
 const removeuser = (socketID) => {
@@ -35,34 +36,41 @@ const getuser = (userID) => {
 io.on("connect", (socket) => {
   console.log(`Client connected: Socket ID ${socket.id}`);
 
+  // Emit initial connection event (optional)
   io.emit("connection", "implementing socket connection.");
 
-  // Handle adding a user
+  // Add a user when they connect
   socket.on("adduser", (userID) => {
-    addusers(userID, socket.id);
-    io.emit("getusers", users);
-    console.log("users after being added", users);
+    if (userID) {
+      addusers(userID, socket.id);
+      io.emit("getusers", users); // Broadcast updated users
+      console.log("Users after addition:", users);
+    }
   });
 
   // Handle sending a message
   socket.on("send", (message) => {
-    console.log("users after sending message", users);
-    const recieverID = message?.newMessage?.recipient._id;
-    const user = getuser(recieverID);
+    console.log("Message received:", message);
 
-    console.log(user);
+    const recipientID = message?.newMessage?.recipient._id;
+    const recipient = getuser(recipientID);
 
-    if (user) {
-      // Send message to the recipient's socket
-      io.to(user.socketID).emit("get", message.newMessage);
+    console.log("Recipient found:", recipient);
+
+    if (recipient) {
+      // Emit message to recipient's socket
+      io.to(recipient.socketID).emit("get", message.newMessage);
+    } else {
+      console.log("Recipient not found or offline");
     }
   });
 
-  // Handle disconnecting a user
+  // Remove a user on disconnect
   socket.on("disconnect", () => {
     console.log(`Client disconnected: Socket ID ${socket.id}`);
     removeuser(socket.id);
-    io.emit("getusers", users);
+    io.emit("getusers", users); // Broadcast updated users
+    console.log("Users after disconnection:", users);
   });
 });
 
