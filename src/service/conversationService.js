@@ -1,4 +1,3 @@
-import mongoose from "mongoose";
 import { conversationModel } from "../model/conversation.js";
 import appAssert from "../utils/appAssert.js";
 import { CONFLICT, NOT_FOUND, OK } from "../utils/constants/http.js";

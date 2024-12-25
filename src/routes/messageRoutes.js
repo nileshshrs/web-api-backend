@@ -11,4 +11,4 @@ messageRoutes.get('/', (req, res) => {
 messageRoutes.post("/create/:id", authenticate, createMessageController);
 messageRoutes.get("/conversation/:id", authenticate, getMessagesController);
 
-export default messageRoutes 
+export default messageRoutes;
