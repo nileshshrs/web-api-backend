@@ -24,7 +24,7 @@ export const getConversationController = catchErrors(async (req, res) => {
     const conversation = await conversationModel
         .find({ participants: userID })
         .populate("participants", "username image")
-        .populate("title","username image")
+        .populate("title", "username image")
         .sort({ updatedAt: -1 });;
 
     appAssert(conversation, NOT_FOUND, "conversation not found.");
@@ -43,4 +43,22 @@ export const updateConversationController = catchErrors(async (req, res) => {
         conversation, // Return the updated conversation object
     })
 
+})
+
+export const getConversationByIDController = catchErrors(async (req, res) => {
+    const conversationID = req.params.id;
+
+    console.log(conversationID)
+
+    const conversation = await conversationModel.findById({ _id: conversationID })
+    .populate("participants", "username image")
+    .populate("title", "username image")
+
+    console.log(conversation)
+
+    appAssert(conversation, NOT_FOUND, `conversation with id: ${conversationID} does not exist.`)   
+
+    return res.status(OK).json(
+        conversation, // Return the updated conversation object
+    );
 })

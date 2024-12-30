@@ -1,5 +1,5 @@
 import { Router } from "express";
-import { createConversationController, getConversationController, updateConversationController } from "../controllers/conversationController.js";
+import { createConversationController, getConversationByIDController, getConversationController, updateConversationController } from "../controllers/conversationController.js";
 import authenticate from "../middleware/authenticate.js";
 
 const conversationRoutes = Router();
@@ -11,6 +11,8 @@ conversationRoutes.get("/get", authenticate, getConversationController);
 //pass in the middleware to validate the the user then i wont have to pass the user id as a param everytime as userID 
 //is stored in cookie iteself
 conversationRoutes.patch("/remove/:id", authenticate, updateConversationController);
+
+conversationRoutes.get("/get/:id", authenticate, getConversationByIDController);
 
 
 

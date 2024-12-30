@@ -28,13 +28,13 @@ const removeuser = (socketID) => {
 };
 
 const getuser = (userID) => {
-  console.log("inside getuser function", userID);
+  // console.log("inside getuser function", userID);
   return users.find((user) => user.userID === userID);
 };
 
 // Socket.IO event handlers
 io.on("connect", (socket) => {
-  console.log(`Client connected: Socket ID ${socket.id}`);
+  // console.log(`Client connected: Socket ID ${socket.id}`);
 
   // Emit initial connection event (optional)
   io.emit("connection", "implementing socket connection.");
@@ -44,18 +44,18 @@ io.on("connect", (socket) => {
     if (userID) {
       addusers(userID, socket.id);
       io.emit("getusers", users); // Broadcast updated users
-      console.log("Users after addition:", users);
+      // console.log("Users after addition:", users);
     }
   });
 
   // Handle sending a message
   socket.on("send", (message) => {
-    console.log("Message received:", message);
+    // console.log("Message received:", message);
 
     const recipientID = message?.newMessage?.recipient._id;
     const recipient = getuser(recipientID);
 
-    console.log("Recipient found:", recipient);
+    // console.log("Recipient found:", recipient);
 
     if (recipient) {
       // Emit message to recipient's socket
@@ -67,10 +67,10 @@ io.on("connect", (socket) => {
 
   // Remove a user on disconnect
   socket.on("disconnect", () => {
-    console.log(`Client disconnected: Socket ID ${socket.id}`);
+    // console.log(`Client disconnected: Socket ID ${socket.id}`);
     removeuser(socket.id);
     io.emit("getusers", users); // Broadcast updated users
-    console.log("Users after disconnection:", users);
+    // console.log("Users after disconnection:", users);
   });
 });
 
