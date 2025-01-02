@@ -21,7 +21,7 @@ export const createFollowerController = catchErrors(async (req, res) => {
     })
 })
 
-
+//follower is always user/ following is alway user2 who user 1 follows
 export const getFollowingController = catchErrors(async (req, res) => {
 
     const user = req.userID;
