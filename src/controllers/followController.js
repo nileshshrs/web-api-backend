@@ -1,4 +1,5 @@
 import { followModel } from "../model/follow.js";
+import { compareFollows, getPopulatedFollowers, getPopulatedFollowings, getUserFollowers, getUserFollowings } from "../service/followService.js";
 import appAssert from "../utils/appAssert.js";
 import catchErrors from "../utils/catchErrors.js";
 import { CONFLICT, CREATED, NOT_FOUND, OK } from "../utils/constants/http.js";
@@ -23,28 +24,54 @@ export const createFollowerController = catchErrors(async (req, res) => {
 
 //follower is always user/ following is alway user2 who user 1 follows
 export const getFollowingController = catchErrors(async (req, res) => {
+    const user = req.userID;  // Current logged-in user
+    const { id } = req.params;  // ID from the request parameters (the user profile you're viewing)
 
-    const user = req.userID;
+    // If the user is viewing their own profile (i.e., req.userID === req.params.id)
+    if (user === id) {
+        // Fetch followings for the current user (without populating)
+        const following = await getUserFollowings(user);
+        console.log(following, "following controller")
+        return res.status(OK).json(following);
+    } else {
+        // Fetch followings for the current user (req.userID) with population
+        const userFollowing = await getPopulatedFollowings(user);
+        // Fetch followings for the user specified in the request parameters (req.params.id) with population
+        const user2Following = await getPopulatedFollowings(id);
 
-    const following = await followModel.find({ follower: user })
-        .populate("follower", "username image")
-        .populate("following", "username image");
+        // Compare followings and add `match: true` if the user follows the same person
+        const followingData = compareFollows(userFollowing, user2Following);
+        console.log(followingData, "following controller")
 
-
-    return res.status(OK).json({ following })
-})
+        // Return the result with the match field included if applicable
+        return res.status(OK).json(followingData);
+    }
+});
 
 
 export const getFollowerController = catchErrors(async (req, res) => {
-    const user = req.userID;
+    const user = req.userID;  // Current logged-in user
+    const { id } = req.params;  // ID from the request parameters (the user profile you're viewing)
 
-    const follower = await followModel.find({ following: user })
-        .populate("follower", "username image")
-        .populate("following", "username image");
+    // If the user is viewing their own profile (i.e., req.userID === req.params.id)
+    if (user === id) {
+        // Fetch followings for the current user (without populating)
+        const follower = await getUserFollowers(user);
+        console.log(follower, "follower controller")
+        return res.status(OK).json(follower);
+    } else {
+        // Fetch followings for the current user (req.userID) with population
+        const userFollower = await getPopulatedFollowers(user);
+        // Fetch followings for the user specified in the request parameters (req.params.id) with population
+        const user2Follower = await getPopulatedFollowers(id);
 
+        // Compare followings and add `match: true` if the user follows the same person
+        const followerData = compareFollows(userFollower, user2Follower);
+        console.log(followerData, "follower controller")
 
-    return res.status(OK).json({ follower })
-
+        // Return the result with the match field included if applicable
+        return res.status(OK).json(followerData);
+    }
 })
 
 

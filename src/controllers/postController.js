@@ -2,7 +2,7 @@ import { postModel } from "../model/posts.js";
 import { getPostsService } from "../service/postService.js";
 import appAssert from "../utils/appAssert.js";
 import catchErrors from "../utils/catchErrors.js";
-import { CONFLICT, CREATED } from "../utils/constants/http.js";
+import { CONFLICT, CREATED, NOT_FOUND, OK } from "../utils/constants/http.js";
 
 export const createPostController = catchErrors(
     async (req, res) => {
@@ -27,6 +27,7 @@ export const createPostController = catchErrors(
     }
 );
 
+//this is get all posts from user and the user he is following
 export const getPostController = catchErrors(
     async (req, res) => {
         const userID = req.userID; // Get the userID from the authenticated request
@@ -37,7 +38,34 @@ export const getPostController = catchErrors(
         const posts = await getPostsService(userID, page, limit);
 
         // Respond with the posts
-        res.status(200).json(posts);
+        res.status(OK).json(posts);
     }
 );
+
+//this is for user only since there is only when user visits his account page not to be mistaken for visiting oter user's account page
+export const getPostsByUserController = catchErrors(
+    async (req, res) => {
+        const userID = req.userID;
+        // Find all posts by the user
+        const posts = await postModel.find({ user: userID });
+
+        appAssert(posts, NOT_FOUND, `posts from user with ${userID} not found.`)
+
+        res.status(OK).json(posts);
+    }
+)
+
+
+export const getPostsByUserIDController = catchErrors(
+    async (req, res) => {
+        const { id } = req.params;
+        // Find all posts by the user
+        const posts = await postModel.find({ user: id});
+
+        appAssert(posts, NOT_FOUND, `posts from user with ${id} not found.`)
+
+        res.status(OK).json(posts);
+    }
+)
+
 

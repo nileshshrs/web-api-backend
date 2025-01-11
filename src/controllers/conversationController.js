@@ -48,13 +48,11 @@ export const updateConversationController = catchErrors(async (req, res) => {
 export const getConversationByIDController = catchErrors(async (req, res) => {
     const conversationID = req.params.id;
 
-    console.log(conversationID)
 
     const conversation = await conversationModel.findById({ _id: conversationID })
     .populate("participants", "username image")
     .populate("title", "username image")
 
-    console.log(conversation)
 
     appAssert(conversation, NOT_FOUND, `conversation with id: ${conversationID} does not exist.`)   
 

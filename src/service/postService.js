@@ -12,7 +12,12 @@ export const getPostsService = async (userID, page, limit) => {
     const query = { user: { $in: followedUserIds } };
     const sort = { createdAt: -1 }; // Sort by latest posts
 
-    const posts = await postModel.find(query).sort(sort).skip(skip).limit(limit);
+    const posts = await postModel
+        .find(query)
+        .populate("user", 'username image')
+        .sort(sort)
+        .skip(skip)
+        .limit(limit);
 
     return posts;
 };

@@ -44,7 +44,6 @@ export const createConversation = async (participants, userID) => {
 
     existingConversation = await conversationModel.findOne({ title: userID });
     if (existingConversation) {
-        console.log("inside second if check")
         const updatedConversation = await conversationModel.findOneAndUpdate(
             { _id: existingConversation._id },
             {
