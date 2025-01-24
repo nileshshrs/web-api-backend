@@ -8,6 +8,9 @@ const userSchema = new mongoose.Schema({
         required: true,
         unique: true,
     },
+    fullname:{
+        type: String,
+    },
     username: {
         type: String,
         required: true,
@@ -22,10 +25,10 @@ const userSchema = new mongoose.Schema({
         default: false,
     },
     image: {
-        type: String,  // Corrected from `string` to `String` (Mongoose type)
-        default: "",
+        type: [String],  // Corrected from `string` to `String` (Mongoose type)
+        default: [],
     },
-    status: {
+    bio: {
         type: String,
         default: '',
     },

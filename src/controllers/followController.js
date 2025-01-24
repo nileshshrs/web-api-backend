@@ -50,7 +50,6 @@ export const getFollowingController = catchErrors(async (req, res) => {
         const followingData = compareFollowings(userFollowing, user2Following);
         // console.log(followingData, "following controller")
 
-        console.log(followingData)
 
         // Return the result with the match field included if applicable
         return res.status(OK).json(followingData);
