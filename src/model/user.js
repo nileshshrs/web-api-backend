@@ -8,7 +8,7 @@ const userSchema = new mongoose.Schema({
         required: true,
         unique: true,
     },
-    fullname:{
+    fullname: {
         type: String,
     },
     username: {
@@ -26,7 +26,7 @@ const userSchema = new mongoose.Schema({
     },
     image: {
         type: [String],  // Corrected from `string` to `String` (Mongoose type)
-        default: [],
+        default: ["https://cvhrma.org/wp-content/uploads/2015/07/default-profile-photo.jpg"],
     },
     bio: {
         type: String,

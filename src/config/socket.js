@@ -65,12 +65,12 @@ io.on("connect", (socket) => {
     }
   });
 
-  socket.on("follow", (message)=>{
-    const followingID = message.following;
-    const notificationRecipient = getuser(followingID)
-    console.log(notificationRecipient)
+  socket.on("notify", (message)=>{
+    const recipient = message.recipient;
+    const notificationRecipient = getuser(recipient)
+
     if(notificationRecipient){
-      io.to(notificationRecipient.socketID).emit("notification", "user has followed you")
+      io.to(notificationRecipient.socketID).emit("notification", message)
     }
   })
 
