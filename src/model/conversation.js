@@ -1,12 +1,12 @@
-import mongoose, { mongo } from "mongoose";
+import mongoose from "mongoose";
 
 const conversationSchema = new mongoose.Schema({
     participants: [{ type: mongoose.Schema.Types.ObjectId, ref: "User", required: true }],
     // messages: [{ type: mongoose.Schema.Types.ObjectId, ref: "Message" }],
     lastMessage: { type: String, default: '' },
     title: { type: mongoose.Schema.Types.ObjectId, ref: "User", default: null }, // Reference to the User who deleted the conversation
-    createdAt: { type: Date, default: Date.now },
-    updatedAt: { type: Date, default: Date.now },
+    read: { type: String, default: null },
+
 }, { timestamps: true })
 
 conversationSchema.pre('save', function (next) {

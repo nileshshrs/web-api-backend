@@ -14,8 +14,9 @@ export const createMessage = async (message) => {
 
     await conversationModel.findByIdAndUpdate(conversation,
         {
-            lastMessage: content
-        }
+            lastMessage: content,
+            read: recipient
+        }, {new: true}
     )
 
     return create;

@@ -1,5 +1,5 @@
 import { Router } from "express";
-import { createConversationController, getConversationByIDController, getConversationController, updateConversationController } from "../controllers/conversationController.js";
+import { createConversationController, getConversationByIDController, getConversationController, updateConversationController, updateReadConversationController } from "../controllers/conversationController.js";
 import authenticate from "../middleware/authenticate.js";
 
 const conversationRoutes = Router();
@@ -13,6 +13,8 @@ conversationRoutes.get("/get", authenticate, getConversationController);
 conversationRoutes.patch("/remove/:id", authenticate, updateConversationController);
 
 conversationRoutes.get("/get/:id", authenticate, getConversationByIDController);
+
+conversationRoutes.get("/update/:id", authenticate, updateReadConversationController);
 
 
 

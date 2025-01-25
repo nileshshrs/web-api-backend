@@ -50,13 +50,32 @@ export const getConversationByIDController = catchErrors(async (req, res) => {
 
 
     const conversation = await conversationModel.findById({ _id: conversationID })
-    .populate("participants", "username image")
-    .populate("title", "username image")
+        .populate("participants", "username image")
+        .populate("title", "username image")
 
 
-    appAssert(conversation, NOT_FOUND, `conversation with id: ${conversationID} does not exist.`)   
+    appAssert(conversation, NOT_FOUND, `conversation with id: ${conversationID} does not exist.`)
 
     return res.status(OK).json(
         conversation, // Return the updated conversation object
     );
+})
+
+
+export const updateReadConversationController = catchErrors(async (req, res) => {
+    const { id } = req.params;
+    const conversationID = id;
+
+    const conversation = await conversationModel.findOneAndUpdate(
+        { _id: conversationID }, // Ensure the user is part of the conversation
+        { $set: { read: null } }, // Set the 'read' field to null
+        { new: true, timestamps: false } // Return the updated conversation
+    );
+    appAssert(conversation, NOT_FOUND, `conversation with id: ${conversationID} does not exist.`);
+
+    return res.status(OK).json({
+        message: "Conversation marked as unread successfully.",
+        conversation,
+    });
+
 })

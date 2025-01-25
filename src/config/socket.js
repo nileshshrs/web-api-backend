@@ -65,6 +65,15 @@ io.on("connect", (socket) => {
     }
   });
 
+  socket.on("follow", (message)=>{
+    const followingID = message.following;
+    const notificationRecipient = getuser(followingID)
+    console.log(notificationRecipient)
+    if(notificationRecipient){
+      io.to(notificationRecipient.socketID).emit("notification", "user has followed you")
+    }
+  })
+
   // Remove a user on disconnect
   socket.on("disconnect", () => {
     // console.log(`Client disconnected: Socket ID ${socket.id}`);
