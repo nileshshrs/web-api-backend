@@ -35,6 +35,7 @@ export const verifyAccessToken = (token, options) => {
 }
 
 export const verifyToken = (token, options) => {
+    console.log(token, "verify refresh token");
     const { secret, ...verifyOpts } = options || refreshTokenSignOptions;
     try {
         const payload = jwt.verify(token, secret, { ...defaults, ...verifyOpts })

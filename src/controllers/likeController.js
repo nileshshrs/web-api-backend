@@ -48,17 +48,16 @@ export const getPostLikedData= catchErrors(
     async(req, res)=>{
         const {id} = req.params;
         const userID = req.userID;
- 
-        
-       
+
         const post = await postModel.findById({_id: id});
         appAssert(post, NOT_FOUND, "post not found");
 
         const likeCount = await likeModel.countDocuments({post: id});
       
-        const userLiked = await likeModel.exists({post: id, user: userID});
+        const userLiked = await likeModel.findOne({post: id, user: userID});
+        console.log(userLiked);
 
-        return res.status(OK).json({ likeCount, userLiked: userLiked ? true : false });
+        return res.status(OK).json({ likeCount, userLiked: Boolean(userLiked)});
     }
 )
 

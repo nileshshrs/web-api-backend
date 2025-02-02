@@ -16,6 +16,7 @@ import followRoutes from "./routes/followRoutes.js";
 import postRoutes from "./routes/postRoutes.js";
 import notificationRoutes from "./routes/notificationRoutes.js";
 import likeRoutes from "./routes/likeRoutes.js";
+import uploadRoutes from "./routes/uploadRoutes.js";
 
 
 
@@ -45,7 +46,8 @@ app.use("/api/v1/messages", messageRoutes)
 app.use("/api/v1/follow", authenticate, followRoutes)
 app.use("/api/v1/post", postRoutes)
 app.use("/api/v1/notification", notificationRoutes)
-app.use("/api/v1/likes", likeRoutes);
+app.use("/api/v1/likes",authenticate, likeRoutes);
+app.use("/api/v1/upload", uploadRoutes);
 
 app.use(errorHandler)
 

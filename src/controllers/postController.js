@@ -11,7 +11,7 @@ export const createPostController = catchErrors(
 
         // Create the post object
         const post = {
-            user: userID,  // Attach the user ID
+            user: req.userID,  // Attach the user ID
             content,  // Use the content from the request
             image: image || []  // If no image is provided, default to an empty array
         };
