@@ -32,10 +32,8 @@ export const getMessagesController = catchErrors(
 
         const messages = await messageModel.find({ conversation })
             .populate("sender", "username image",)
-            .populate("recipient", "username image",)
-            ;
-
+            .populate("recipient", "username image",);
 
         return res.status(OK).json(messages);
     }
-)
+);

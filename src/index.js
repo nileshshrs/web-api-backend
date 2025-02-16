@@ -28,7 +28,7 @@ app.use(express.urlencoded({ extended: true }));
 //submissions or other requests that send data in the application/x-www-form-urlencoded format.
 app.use(
     cors({
-        origin: 'http://localhost:5173',
+        origin: ["http://localhost:5173","http://10.0.2.2:3000"],
         credentials: true,
         allowedHeaders: ['Content-Type', 'Authorization'],
         methods: ['GET', 'POST', 'PUT', 'DELETE', 'PATCH'],

@@ -30,7 +30,7 @@ const authenticate = (req, res, next) => {
     // console.log(authorizationHeader,"auth")
     const tokenFromHeader = authorizationHeader.startsWith('Bearer ') ? authorizationHeader.split(' ')[1] : undefined;
 
-    console.log(tokenFromHeader, "token")
+    // console.log(tokenFromHeader, "token")
     
     // If no token in cookies, use the token from Authorization header
     const accessTokenToUse = accessToken || tokenFromHeader;

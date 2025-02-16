@@ -31,6 +31,32 @@ export const getConversationController = catchErrors(async (req, res) => {
 
     return res.status(OK).json(conversation);
 })
+// for mobile
+export const createMobileConversationController = catchErrors(async (req, res) => {
+    console.log('creating chat')
+    const userID = req.userID;
+    const { participants } = req.body;
+
+    participants.sort();
+
+    const conversation = await createConversation(participants, userID);
+    appAssert(conversation, NOT_FOUND, "Failed to create conversation.");
+
+    // Build the query to always populate participants
+    let query = conversationModel
+        .findById(conversation._id)
+        .populate("participants", "username image");
+
+    // Conditionally populate title if it exists
+    if (conversation.title) {
+        query = query.populate("title", "username image");
+    }
+
+    const populatedConversation = await query;
+
+    return res.status(CREATED).json(populatedConversation);
+});
+
 
 export const updateConversationController = catchErrors(async (req, res) => {
     const userID = req.userID;

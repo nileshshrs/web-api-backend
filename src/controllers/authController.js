@@ -149,27 +149,3 @@ export const resetPasswordController = catchErrors(
     }
 )
 
-//need to think about how to implement the below with mobile application same as access token problem
-// export const refreshController = catchErrors(
-//     async (req, res) => {
-//         // Old code: Get refresh token from cookies
-//         const refreshToken = req.cookies.refresh_token || undefined; 
-
-//         // Added part: Check Authorization header for refresh token if not found in cookies
-//         const authorizationHeader = req.headers.authorization || '';
-//         const tokenFromHeader = authorizationHeader.startsWith('Bearer ') ? authorizationHeader.split(' ')[1] : undefined;
-
-//         // Use the refresh token from cookies or from the Authorization header
-//         const refreshTokenToUse = refreshToken || tokenFromHeader;
-
-//         appAssert(refreshTokenToUse, UNAUTHORIZED, "missing refresh token.");
-
-//         const { accessToken, newRefreshToken } = await refreshUserAccessToken(refreshTokenToUse);
-        
-//         if (newRefreshToken) res.cookie('refresh_token', newRefreshToken, getRefreshTokenCookieOptions());
-//         return res.status(OK).cookie('access_token', accessToken, getAccessTokenCookieOptions()).json({
-//             message: "access token has been refreshed."
-//         })
-//     }
-// )
-
