@@ -17,6 +17,7 @@ import postRoutes from "./routes/postRoutes.js";
 import notificationRoutes from "./routes/notificationRoutes.js";
 import likeRoutes from "./routes/likeRoutes.js";
 import uploadRoutes from "./routes/uploadRoutes.js";
+import commentRoutes from "./routes/commentRoutes.js";
 
 
 
@@ -28,7 +29,7 @@ app.use(express.urlencoded({ extended: true }));
 //submissions or other requests that send data in the application/x-www-form-urlencoded format.
 app.use(
     cors({
-        origin: ["http://localhost:5173","http://10.0.2.2:3000"],
+        origin: ["http://localhost:5173", "http://10.0.2.2:3000"],
         credentials: true,
         allowedHeaders: ['Content-Type', 'Authorization'],
         methods: ['GET', 'POST', 'PUT', 'DELETE', 'PATCH'],
@@ -46,8 +47,9 @@ app.use("/api/v1/messages", messageRoutes)
 app.use("/api/v1/follow", authenticate, followRoutes)
 app.use("/api/v1/post", postRoutes)
 app.use("/api/v1/notification", notificationRoutes)
-app.use("/api/v1/likes",authenticate, likeRoutes);
+app.use("/api/v1/likes", authenticate, likeRoutes);
 app.use("/api/v1/upload", uploadRoutes);
+app.use("/api/v1/comment", commentRoutes);
 
 app.use(errorHandler)
 

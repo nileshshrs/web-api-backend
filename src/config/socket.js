@@ -34,7 +34,7 @@ const getuser = (userID) => {
 
 // Socket.IO event handlers
 io.on("connect", (socket) => {
-  console.log(`Client connected: Socket ID ${socket.id}`);
+  // console.log(`Client connected: Socket ID ${socket.id}`);
 
   // Emit initial connection event (optional)
   io.emit("connection", "implementing socket connection.");
@@ -50,10 +50,10 @@ io.on("connect", (socket) => {
 
   // Handle sending a message
   socket.on("send", (message) => {
-    console.log("Message received:", message);
+    // console.log("Message received:", message);
 
     const recipientID = message?.newMessage?.recipient._id;
-    console.log(recipientID);
+    // console.log(recipientID);
     const recipient = getuser(recipientID);
 
     // console.log("Recipient found:", recipient);

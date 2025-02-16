@@ -90,4 +90,17 @@ export const getPostsByUserIDController = catchErrors(
     }
 )
 
+export const getPostsByIDController = catchErrors(
+    async (req, res) => {
+        const { id } = req.params;  // Extract the id properly
+
+        const post = await postModel.findById(id).populate("user","username image"); // Correct way to use findById
+
+        appAssert(post, NOT_FOUND, `Post with ID ${id} not found.`);
+
+        res.status(OK).json(post);
+    }
+);
+
+
 
