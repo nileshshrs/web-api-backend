@@ -55,7 +55,6 @@ export const getPostLikedData= catchErrors(
         const likeCount = await likeModel.countDocuments({post: id});
       
         const userLiked = await likeModel.findOne({post: id, user: userID});
-        console.log(userLiked);
 
         return res.status(OK).json({ likeCount, userLiked: Boolean(userLiked)});
     }

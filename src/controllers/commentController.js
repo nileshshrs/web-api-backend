@@ -9,12 +9,14 @@ export const createCommentController = catchErrors(
         const userID = req.userID;
 
         const { post, comment } = req.body;
+        console.log(post);
 
-        const newComment = await commentModel.create({
+        let newComment = await commentModel.create({
             user: userID,
             post: post,
             comment: comment
         })
+        newComment = await newComment.populate("user", "username image");
 
         appAssert(newComment, CONFLICT, "failed to create a new comment.")
 
@@ -26,7 +28,7 @@ export const getComments = catchErrors(
     async (req, res) => {
         const { id } = req.params;
 
-        const comments = await commentModel.find({ post: id }).populate("user" ,"username image");
+        const comments = await commentModel.find({ post: id }).populate("user", "username image");
         appAssert(comments, NOT_FOUND, `comments for post with id ${id} not found.`);
 
         return res.status(OK).json(comments);
@@ -35,9 +37,9 @@ export const getComments = catchErrors(
 
 export const deleteCommentController = catchErrors(
     async (req, res) => {
-        const {id} = req.params;
-        await commentModel.findByIdAndDelete(id);
-
+        const { id } = req.params;
+        const deleted = await commentModel.findByIdAndDelete(id)    ;
+        appAssert(deleted, NOT_FOUND, "comment not found");
         return res.status(OK).json({ message: "comment deleted successfully." });
     }
 )
