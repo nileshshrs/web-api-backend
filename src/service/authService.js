@@ -180,8 +180,9 @@ export const verifyEmail = async (code) => {
 
 
 export const sendPasswordResetEmail = async (email) => {
+    console.log(email)
     // Get the user by email
-    const user = await userModel.findOne({ email });
+    const user = await userModel.findOne({ email: email });
 
     appAssert(user, NOT_FOUND, "User not found.");
     console.log(user)
