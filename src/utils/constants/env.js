@@ -13,3 +13,4 @@ export const JWT_REFRESH_SECRET = getEnv("JWT_REFRESH_SECRET");
 export const RESEND_API= getEnv("RESEND_API")
 export const APP_ORIGIN= getEnv("APP_ORIGIN")
 export const LOCAL_URI = getEnv("LOCAL_URI")
+export const NODE_ENV = getEnv("NODE_ENV")
